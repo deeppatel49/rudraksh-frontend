@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -68,7 +68,7 @@ function getInitialLocationState() {
   };
 }
 
-export function HomeSearchStrip() {
+function HomeSearchStripContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -437,5 +437,13 @@ export function HomeSearchStrip() {
         </Link>
       </div>
     </section>
+  );
+}
+
+export function HomeSearchStrip() {
+  return (
+    <Suspense fallback={null}>
+      <HomeSearchStripContent />
+    </Suspense>
   );
 }

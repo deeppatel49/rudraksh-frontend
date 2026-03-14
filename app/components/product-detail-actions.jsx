@@ -1,29 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../context/auth-context";
-import { hasDeliveredPurchaseForProduct } from "../lib/order-client";
 
-export function ProductDetailActions({ productId, productName, productPrice = 0, productImage = "" }) {
+export function ProductDetailActions({ productId, productName }) {
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
-  const { user } = useAuth();
-  const canReview = user?.id ? hasDeliveredPurchaseForProduct(user.id, productId) : false;
-
-  const redirectToLogin = (actionType) => {
-    const params = new URLSearchParams({
-      next: `/products/${productId}`,
-      action: actionType,
-      productId,
-      quantity: String(Math.max(1, quantity)),
-      pname: productName || "Product",
-      pprice: String(Number(productPrice) || 0),
-      pimg: productImage || "/products/default-medicine.svg",
-    });
-    router.push(`/login?${params.toString()}`);
-  };
 
   const handleInquiry = () => {
     const params = new URLSearchParams({
@@ -39,15 +21,6 @@ export function ProductDetailActions({ productId, productName, productPrice = 0,
       message: `Please share quotation for ${productName}. Quantity: ${quantity}.`,
     });
     router.push(`/contact?${params.toString()}`);
-  };
-
-  const handleReviewAccess = () => {
-    if (!user) {
-      redirectToLogin("review_product");
-      return;
-    }
-
-    router.push("/profile");
   };
 
   return (
@@ -90,15 +63,6 @@ export function ProductDetailActions({ productId, productName, productPrice = 0,
         <button type="button" className="secondary-btn" onClick={handleInquiry}>
           Inquiry
         </button>
-        {canReview ? (
-          <Link href={`/products/${productId}/reviews`} className="secondary-btn">
-            Write Review
-          </Link>
-        ) : (
-          <button type="button" className="secondary-btn" onClick={handleReviewAccess}>
-            Review after Delivery
-          </button>
-        )}
       </div>
     </div>
   );

@@ -7175,11 +7175,8 @@ a {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   min-height: 44px;
-  background: #161616;
-  border: 1px solid #2e2e2e;
-  border-radius: 16px;
+  background: #fafdff;
   position: relative;
-  overflow: hidden;
 }
 
 .home-search-form input {
@@ -7188,12 +7185,12 @@ a {
   padding: 0 0.95rem;
   min-height: 44px;
   background: transparent;
-  color: #f7f7f7;
+  color: #111827;
   font: inherit;
 }
 
 .home-search-form input::placeholder {
-  color: #9ca3af;
+  color: #5d7fa3;
 }
 
 .home-search-form input:focus {
@@ -7204,9 +7201,9 @@ a {
   width: 46px;
   height: 44px;
   border: none;
-  border-left: 1px solid #2e2e2e;
-  background: #161616;
-  color: #f3f4f6;
+  border-left: 1px solid #d3e4f6;
+  background: #fafdff;
+  color: #1f6dc0;
   cursor: pointer;
 }
 
@@ -7215,21 +7212,21 @@ a {
   top: calc(100% + 0.35rem);
   left: 0;
   right: 0;
-  border: 1px solid #2a2a2a;
-  border-radius: 18px;
-  background: #1f1f1f;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.4);
+  border: 1px solid #d6e3f3;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 14px 28px rgba(15, 63, 117, 0.16);
   overflow: hidden;
   z-index: 40;
-  padding: 0.35rem 0;
 }
 
 .home-search-suggestion-item {
   width: 100%;
   border: none;
-  background: transparent;
-  min-height: 56px;
-  padding: 0.65rem 1rem;
+  border-bottom: 1px solid #edf3fa;
+  background: #ffffff;
+  min-height: 48px;
+  padding: 0.65rem 0.8rem;
   text-align: left;
   display: grid;
   grid-template-columns: 26px minmax(0, 1fr) 46px;
@@ -7244,7 +7241,7 @@ a {
 
 .home-search-suggestion-item:hover,
 .home-search-suggestion-item.is-active {
-  background: #343434;
+  background: #f1f7ff;
 }
 
 .home-search-suggestion-icon {
@@ -7253,7 +7250,7 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #d1d5db;
+  color: #4b5f76;
 }
 
 .home-search-suggestion-icon-svg {
@@ -7267,9 +7264,9 @@ a {
 }
 
 .home-search-suggestion-name {
-  color: #f3f4f6;
-  font-size: 1rem;
-  font-weight: 600;
+  color: #123860;
+  font-size: 0.98rem;
+  font-weight: 700;
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -7278,9 +7275,9 @@ a {
 
 .home-search-suggestion-empty {
   margin: 0;
-  color: #d1d5db;
-  font-size: 0.92rem;
-  padding: 0.95rem 1rem;
+  color: #5f7f9e;
+  font-size: 0.84rem;
+  padding: 0.75rem 0.85rem;
 }
 
 .home-search-suggestion-thumb {
@@ -7288,7 +7285,7 @@ a {
   height: 38px;
   border-radius: 8px;
   overflow: hidden;
-  background: #2b2b2b;
+  background: #e6eef8;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -7298,6 +7295,68 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Screenshot-style suggestion dropdown applied only on Medicines section (/products). */
+.products-page .home-search-form {
+  background: #161616;
+  border: 1px solid #2e2e2e;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.products-page .home-search-form input {
+  color: #f7f7f7;
+}
+
+.products-page .home-search-form input::placeholder {
+  color: #9ca3af;
+}
+
+.products-page .home-search-form button {
+  border-left: 1px solid #2e2e2e;
+  background: #161616;
+  color: #f3f4f6;
+}
+
+.products-page .home-search-suggestions {
+  border: 1px solid #2a2a2a;
+  border-radius: 18px;
+  background: #1f1f1f;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.4);
+  padding: 0.35rem 0;
+}
+
+.products-page .home-search-suggestion-item {
+  border-bottom: none;
+  background: transparent;
+  min-height: 56px;
+  padding: 0.65rem 1rem;
+}
+
+.products-page .home-search-suggestion-item:hover,
+.products-page .home-search-suggestion-item.is-active {
+  background: #343434;
+}
+
+.products-page .home-search-suggestion-icon {
+  color: #d1d5db;
+}
+
+.products-page .home-search-suggestion-name {
+  color: #f3f4f6;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.products-page .home-search-suggestion-empty {
+  color: #d1d5db;
+  font-size: 0.92rem;
+  padding: 0.95rem 1rem;
+}
+
+.products-page .home-search-suggestion-thumb {
+  background: #2b2b2b;
 }
 
 .home-search-icon {
