@@ -42,6 +42,10 @@ function getDrugLabel(product) {
 }
 
 function getProductImageSrc(product) {
+  if (typeof product?.image === "string" && product.image.trim()) {
+    return product.image;
+  }
+
   const seed = hashText(`${product?.id || "default"}-${product?.name || "medicine"}`);
   const [bg1, bg2, textColor] = MEDICINE_THEME_COLORS[seed % MEDICINE_THEME_COLORS.length];
   const label = getDrugLabel(product);
@@ -81,11 +85,56 @@ function getProductImageSrc(product) {
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
+function normalizeProductForDisplay(product) {
+  if (!product) {
+    return null;
+  }
+
+  const id = product.id ?? product.srNo ?? product.SrNo;
+  const price = Number(product.price ?? product.mrp ?? product.Mrp ?? 0) || 0;
+  const packSize = product.packSize || product.pack_size || product.pack || product.Pack || "";
+  const category = product.category || product.Category || "Medicine";
+  const manufacturer = product.manufacturer || product.company || product.Company || "N/A";
+  const composition = product.composition || product.generic || product.Generic || "";
+  const name = product.name || product.itemName || product.item_name || product.Item_Name || "Pharmacy product";
+  const drugType = product.drugType || product.drug_type || product.itemType || product.ItemType || "Medicine";
+  const isInStock =
+    product.inStock !== undefined
+      ? Boolean(product.inStock)
+      : product.in_stock !== undefined
+        ? Boolean(product.in_stock)
+        : true;
+
+  return {
+    ...product,
+    id,
+    srNo: product.srNo || product.SrNo || id,
+    name,
+    itemName: product.itemName || product.item_name || product.Item_Name || name,
+    category,
+    manufacturer,
+    composition,
+    drugType,
+    itemType: product.itemType || product.ItemType || drugType,
+    packSize,
+    pack: product.pack || product.Pack || packSize,
+    price,
+    description: product.description || composition || packSize || "Pharmacy product",
+    image: typeof product.image === "string" && product.image.trim() ? product.image : "",
+    imageAlt: product.imageAlt || `${name} medicine`,
+    inStock: isInStock,
+  };
+}
+
 export function ProductGrid({ initialCategory = "All", initialQuery = "", allProducts = products }) {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [imageErrors, setImageErrors] = useState({});
-  const [dynamicProducts, setDynamicProducts] = useState(allProducts || []);
+  const [dynamicProducts, setDynamicProducts] = useState(
+    Array.isArray(allProducts)
+      ? allProducts.map(normalizeProductForDisplay).filter(Boolean)
+      : []
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
@@ -120,9 +169,14 @@ export function ProductGrid({ initialCategory = "All", initialQuery = "", allPro
       setDynamicProducts((prev) => {
         const merged = [...prev];
         newProducts.forEach((product) => {
-          const exists = merged.some((p) => p.id === product.id || p.srNo === product.srNo);
+          const normalizedProduct = normalizeProductForDisplay(product);
+          if (!normalizedProduct) {
+            return;
+          }
+
+          const exists = merged.some((p) => p.id === normalizedProduct.id || p.srNo === normalizedProduct.srNo);
           if (!exists) {
-            merged.push(product);
+            merged.push(normalizedProduct);
           }
         });
         return merged;
@@ -284,8 +338,8 @@ export function ProductGrid({ initialCategory = "All", initialQuery = "", allPro
                       }));
                     }}
                   />
-                  <span className="product-stock-pill in">
-                    {product.inStock === false ? "Available" : "In Stock"}
+                  <span className={`product-stock-pill ${product.inStock === false ? "out" : "in"}`}>
+                    {product.inStock === false ? "Out of Stock" : "In Stock"}
                   </span>
                 </div>
 
@@ -296,6 +350,9 @@ export function ProductGrid({ initialCategory = "All", initialQuery = "", allPro
                     <p className="product-manufacturer">By {product.manufacturer}</p>
                   )}
                   <p className="product-pack-size">{product.packSize || product.description || product.composition || "Pharmacy product"}</p>
+                  <p className="product-pack-size" style={{ marginTop: "0.2rem", opacity: 0.86 }}>
+                    {product.description || "Reliable pharmacy product from trusted sources."}
+                  </p>
                 </div>
 
                 <div className="product-card-footer">

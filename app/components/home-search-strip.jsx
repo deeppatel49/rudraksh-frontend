@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const LOCATION_CACHE_KEY = "Rudraksh_home_location_cache_v1";
+const DEFAULT_SUGGESTION_IMAGE = "/products/default-medicine.svg";
 
 function formatLocationLabel(payload, latitude, longitude) {
   const locality =
@@ -395,6 +396,10 @@ export function HomeSearchStrip() {
                   suggestions.map((item, index) => {
                     const key = item.id || item.srNo || `${item.name}-${index}`;
                     const isActive = index === activeSuggestionIndex;
+                    const thumbnailSrc = typeof item?.image === "string" && item.image.trim()
+                      ? item.image
+                      : DEFAULT_SUGGESTION_IMAGE;
+
                     return (
                       <button
                         key={key}
@@ -405,8 +410,16 @@ export function HomeSearchStrip() {
                         onMouseDown={(event) => event.preventDefault()}
                         onClick={() => handleSuggestionSelect(item)}
                       >
+                        <span className="home-search-suggestion-icon" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" className="home-search-suggestion-icon-svg">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 7v5l3.5 2.2" />
+                          </svg>
+                        </span>
                         <span className="home-search-suggestion-name">{item.name}</span>
-                        <span className="home-search-suggestion-meta">{item.category || "General"}</span>
+                        <span className="home-search-suggestion-thumb" aria-hidden="true">
+                          <img src={thumbnailSrc} alt="" loading="lazy" decoding="async" />
+                        </span>
                       </button>
                     );
                   })

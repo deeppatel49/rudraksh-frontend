@@ -30,19 +30,34 @@ export function getSupabaseClient() {
 function transformProduct(product) {
   if (!product) return null;
 
+  const id = product.SrNo;
+  const itemName = product.Item_Name || "Untitled product";
+  const manufacturer = product.Company || "N/A";
+  const generic = product.Generic || "";
+  const pack = product.Pack || "";
+  const itemType = product.ItemType || "Medicine";
+  const price = parseFloat(product.Mrp) || 0;
+  const category = product.Category || "Medicine";
+
   return {
-    id: product.SrNo,
-    srNo: product.SrNo,
-    name: product.Item_Name,
-    itemName: product.Item_Name,
-    company: product.Company,
-    manufacturer: product.Company,
-    generic: product.Generic,
-    itemType: product.ItemType,
-    category: product.Category,
-    pack: product.Pack,
-    price: parseFloat(product.Mrp) || 0,
-    mrp: parseFloat(product.Mrp) || 0
+    id,
+    srNo: id,
+    name: itemName,
+    itemName,
+    company: manufacturer,
+    manufacturer,
+    generic,
+    composition: generic,
+    itemType,
+    drugType: itemType,
+    category,
+    pack,
+    packSize: pack,
+    price,
+    description: generic || pack || "Pharmacy product",
+    image: "",
+    imageAlt: `${itemName} medicine`,
+    inStock: true,
   };
 }
 

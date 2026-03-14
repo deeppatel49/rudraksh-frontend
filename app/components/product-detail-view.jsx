@@ -199,7 +199,6 @@ export function ProductDetailView({ product, productId }) {
                   { label: "Item Type", value: product.itemType },
                   { label: "Category", value: product.category },
                   { label: "Pack Size", value: product.pack },
-                  { label: "MRP", value: product.price ? `₹${Number(product.price).toFixed(2)}` : null },
                   { label: "Product ID (SrNo)", value: product.srNo || product.id },
                 ].filter((row) => row.value && String(row.value) !== "N/A").map((row, idx) => (
                   <tr key={idx} style={{ borderBottom: "1px solid #f1f5f9" }}>
