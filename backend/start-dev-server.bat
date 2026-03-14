@@ -1,3 +1,0 @@
-@echo off
-echo Starting Rudraksh backend development server...
-npm.cmd run dev
