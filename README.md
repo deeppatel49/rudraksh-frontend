@@ -290,24 +290,20 @@ FRONTEND_URL=http://localhost:3000
 
 ```bash
 npm install
+npm run dev
 ```
 
-### 2. Install Backend Dependencies
 
-```bash
-cd backend
-npm install
-cd ..
-```
 
-### 3. Run Database Schema Migration (Supabase)
+
+### 2. Run Database Schema Migration (Supabase)
 
 In Supabase SQL Editor, run:
 
 1. `backend/sql/complete-schema.sql`
 2. `backend/sql/data-migration.sql` (optional but recommended for existing JSON data)
 
-### 4. Start Backend
+### 3. Start Backend
 
 ```bash
 cd backend
@@ -320,7 +316,7 @@ Backend base URL:
 http://localhost:5000/api/v1
 ```
 
-### 5. Start Frontend
+### 4. Start Frontend
 
 In a new terminal (project root):
 
