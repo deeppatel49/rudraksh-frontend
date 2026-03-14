@@ -1,0 +1,37 @@
+        </main>
+    </div>
+
+    <script nonce="<%= cspNonce %>">
+        const sidebarToggle = document.getElementById("sidebarToggle");
+        const sidebar = document.getElementById("adminSidebar");
+        const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+
+        function setSidebarState(isOpen) {
+            if (!sidebar || !sidebarBackdrop || !sidebarToggle) return;
+            sidebar.classList.toggle("open", isOpen);
+            sidebarBackdrop.classList.toggle("show", isOpen);
+            sidebarToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        }
+
+        if (sidebarToggle && sidebar && sidebarBackdrop) {
+            sidebarToggle.addEventListener("click", () => {
+                setSidebarState(!sidebar.classList.contains("open"));
+            });
+
+            sidebarBackdrop.addEventListener("click", () => setSidebarState(false));
+
+            window.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    setSidebarState(false);
+                }
+            });
+
+            window.addEventListener("resize", () => {
+                if (window.innerWidth > 1120) {
+                    setSidebarState(false);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

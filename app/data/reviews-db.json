@@ -1,0 +1,92 @@
+[
+  {
+    "id": "r101",
+    "productId": "p1",
+    "reviewerName": "Pooja Mehta",
+    "rating": 5,
+    "title": "Great for daily routine",
+    "description": "Easy to take and I have felt better energy through the week. Packaging and delivery were also good.",
+    "date": "2026-02-14"
+  },
+  {
+    "id": "r102",
+    "productId": "p1",
+    "reviewerName": "Ravi Patel",
+    "rating": 4,
+    "title": "Good quality multivitamin",
+    "description": "Tablets are easy to swallow and product quality looks genuine. Would like a larger pack option.",
+    "date": "2026-01-29"
+  },
+  {
+    "id": "r103",
+    "productId": "p2",
+    "reviewerName": "Mehul Shah",
+    "rating": 5,
+    "title": "Quick and accurate",
+    "description": "Thermometer gives readings in seconds and is very simple for elders to use.",
+    "date": "2026-02-08"
+  },
+  {
+    "id": "r104",
+    "productId": "p3",
+    "reviewerName": "Nisha Trivedi",
+    "rating": 5,
+    "title": "Very reliable monitor",
+    "description": "Readings are consistent and display is clear. Great home-use device for regular BP checks.",
+    "date": "2026-02-02"
+  },
+  {
+    "id": "r105",
+    "productId": "p3",
+    "reviewerName": "Amit Solanki",
+    "rating": 4,
+    "title": "Useful for family",
+    "description": "Cuff quality is good and setup was easy. Battery life is decent for monthly usage.",
+    "date": "2026-01-22"
+  },
+  {
+    "id": "r106",
+    "productId": "p4",
+    "reviewerName": "Hiral Desai",
+    "rating": 4,
+    "title": "Effective first-aid item",
+    "description": "Used for minor cuts at home and it worked as expected. Good value for price.",
+    "date": "2026-02-11"
+  },
+  {
+    "id": "r107",
+    "productId": "p5",
+    "reviewerName": "Ketan Parmar",
+    "rating": 5,
+    "title": "Fast relief after workout",
+    "description": "Gel absorbs quickly and gives relief in shoulder pain after exercise.",
+    "date": "2026-02-18"
+  },
+  {
+    "id": "r108",
+    "productId": "p6",
+    "reviewerName": "Sneha Vyas",
+    "rating": 4,
+    "title": "Good taste and quality",
+    "description": "Syrup tastes fine and feels authentic. Delivery was on time.",
+    "date": "2026-01-16"
+  },
+  {
+    "id": "r1772708370729987",
+    "productId": "homepage",
+    "reviewerName": "Deep Patel",
+    "rating": 5,
+    "title": "Website Review",
+    "description": "excellent the service",
+    "date": "2026-03-05"
+  },
+  {
+    "id": "r1772866721538609",
+    "productId": "homepage",
+    "reviewerName": "lathiya gaurav",
+    "rating": 5,
+    "title": "Website Review",
+    "description": "dvdvdvdzvzvzc",
+    "date": "2026-03-07"
+  }
+]

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="Moov">
+  <circle cx="90" cy="90" r="84" fill="#ffffff"/>
+  <rect x="38" y="72" width="104" height="36" rx="4" fill="#5e2b84"/>
+  <text x="84" y="96" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#ffffff" font-style="italic">moov</text>
+  <circle cx="132" cy="90" r="9" fill="#f59e0b"/>
+  <circle cx="132" cy="90" r="4.5" fill="#fde68a"/>
+</svg>

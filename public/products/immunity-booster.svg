@@ -1,0 +1,10 @@
+<svg width="640" height="360" viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="360" rx="28" fill="#ECF7FF"/>
+  <rect x="254" y="36" width="132" height="52" rx="16" fill="#C4E0F8"/>
+  <rect x="228" y="82" width="184" height="240" rx="28" fill="#FFFFFF" stroke="#9EC4E8" stroke-width="8"/>
+  <rect x="252" y="126" width="136" height="62" rx="12" fill="#1F5FA5"/>
+  <path d="M320 224L337 241L320 258L303 241L320 224Z" fill="#7FB6E4"/>
+  <path d="M320 234V282" stroke="#6BA7DA" stroke-width="10" stroke-linecap="round"/>
+  <path d="M296 260H344" stroke="#6BA7DA" stroke-width="10" stroke-linecap="round"/>
+  <text x="320" y="164" text-anchor="middle" font-size="18" font-family="Arial, sans-serif" fill="#FFFFFF">IMMUNITY</text>
+</svg>

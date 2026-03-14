@@ -1,0 +1,84 @@
+[
+  {
+    "id": "35ef47d7-5361-4d0d-b08c-5705194e9c85",
+    "userId": "user_deeppatel172002@gmail.com",
+    "name": "Deep Patel",
+    "email": "deeppatel172002@gmail.com",
+    "phone": "919510621217",
+    "senderRole": "customer",
+    "senderName": "Deep Patel",
+    "message": "ok the deliverly given tommorew",
+    "attachment": null,
+    "status": "received",
+    "createdAt": "2026-03-09T13:27:30.435Z"
+  },
+  {
+    "id": "27d17e37-f6df-409e-8e70-32084a484f43",
+    "userId": "user_deeppatel172002@gmail.com",
+    "name": "Deep Patel",
+    "email": "deeppatel172002@gmail.com",
+    "phone": "919510621217",
+    "senderRole": "seller",
+    "senderName": "rudraksh pharmacy",
+    "message": "dccdcd",
+    "attachment": null,
+    "status": "read",
+    "createdAt": "2026-03-10T08:58:23.898Z"
+  },
+  {
+    "id": "b0930c05-a722-4f31-9fae-bc83f46fa3b8",
+    "userId": "user_deeppatel172002@gmail.com",
+    "name": "Deep Patel",
+    "email": "deeppatel172002@gmail.com",
+    "phone": "919510621217",
+    "senderRole": "seller",
+    "senderName": "rudraksh pharmacy",
+    "message": "dccdcd",
+    "attachment": null,
+    "status": "read",
+    "createdAt": "2026-03-10T08:58:25.300Z"
+  },
+  {
+    "id": "5be1ae75-5ce4-4d53-84a4-592154392adc",
+    "userId": "user_deeppatel172002@gmail.com",
+    "name": "Deep Patel",
+    "email": "deeppatel172002@gmail.com",
+    "phone": "919510621217",
+    "senderRole": "seller",
+    "senderName": "rudraksh pharmacy",
+    "message": "",
+    "attachment": {
+      "url": "/uploads/images/make_logo_creative_and_dynamic_and_responive_and_l_delpmaspu-1773140251318-704304931.png",
+      "mimeType": "image/png",
+      "fileName": "Make_logo_creative_and_dynamic_and_responive_and_l_delpmaspu.png"
+    },
+    "status": "read",
+    "createdAt": "2026-03-10T10:57:31.844Z"
+  },
+  {
+    "id": "ae33d63c-f32f-4169-9c8c-dd443ff67c7e",
+    "userId": "user_deeppatel172002@gmail.com",
+    "name": "Deep Patel",
+    "email": "deeppatel172002@gmail.com",
+    "phone": "919510621217",
+    "senderRole": "customer",
+    "senderName": "Deep Patel",
+    "message": "xdfsg",
+    "attachment": null,
+    "status": "received",
+    "createdAt": "2026-03-13T13:05:04.084Z"
+  },
+  {
+    "id": "e8c5f387-c1d1-4b51-b8d7-99844a05f3ee",
+    "userId": "user_deeppatel172002@gmail.com",
+    "name": "Deep Patel",
+    "email": "deeppatel172002@gmail.com",
+    "phone": "919510621217",
+    "senderRole": "seller",
+    "senderName": "rudraksh pharmacy",
+    "message": "dvvdcdxv",
+    "attachment": null,
+    "status": "read",
+    "createdAt": "2026-03-13T13:13:24.708Z"
+  }
+]

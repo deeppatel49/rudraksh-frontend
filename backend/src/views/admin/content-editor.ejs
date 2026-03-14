@@ -1,0 +1,418 @@
+<%
+const resolvedAdminBaseUrl = typeof adminBaseUrl !== "undefined" && adminBaseUrl ? adminBaseUrl : "";
+const pageTitle = slug === "home" ? "Home Content" : "About Content";
+const activeView = slug;
+const hero = contentData?.sections?.hero || {};
+const heroStats = contentData?.sections?.heroStats || [];
+const trustPillars = contentData?.sections?.trustPillars || [];
+const promoBanner = contentData?.sections?.promoBanner || {};
+const trustStats = contentData?.sections?.trustStats || [];
+const storyImage = contentData?.sections?.storyImage || {};
+%>
+<%- include("partials/admin-shell-start", { pageTitle, activeView, resolvedAdminBaseUrl, adminUser, cspNonce }) %>
+
+<section class="page-head">
+    <div class="page-copy">
+        <span class="page-badge"><%= slug === "home" ? "Homepage CMS" : "About page CMS" %></span>
+        <h2 class="page-title"><%= slug === "home" ? "Edit homepage content with structure." : "Keep the about page credible and current." %></h2>
+        <p><%= slug === "home"
+            ? "This backend editor controls hero messaging, trust content, promo media, and SEO used by the frontend homepage."
+            : "This backend editor controls trust stats, highlights, story imagery, and SEO used by the frontend about page." %></p>
+    </div>
+    <div class="page-actions">
+        <a class="ghost-btn" href="<%= resolvedAdminBaseUrl %>/admin/dashboard">Back to dashboard</a>
+    </div>
+</section>
+
+<% if (errorMessage) { %>
+    <div class="message error">
+        <div>
+            <strong>Save failed</strong>
+            <p><%= errorMessage %></p>
+        </div>
+    </div>
+<% } %>
+
+<% if (successMessage) { %>
+    <div class="message success">
+        <div>
+            <strong>Content saved</strong>
+            <p><%= successMessage %></p>
+        </div>
+    </div>
+<% } %>
+
+<section class="editor-card">
+    <div class="editor-head">
+        <div>
+            <div class="table-label"><%= slug === "home" ? "Page configuration" : "Story configuration" %></div>
+            <h3 class="section-title"><%= slug === "home" ? "Homepage content model" : "About page content model" %></h3>
+            <p class="table-caption">Fields are grouped by what the frontend actually renders, so editing is faster and less error-prone.</p>
+        </div>
+    </div>
+
+    <% if (slug === "home") { %>
+        <form method="POST" action="<%= resolvedAdminBaseUrl %>/admin/content/home" class="editor-body" enctype="multipart/form-data">
+            <section class="editor-section">
+                <div class="section-head">
+                    <div>
+                        <div class="table-label">Hero block</div>
+                        <h4 class="section-title">Primary message</h4>
+                    </div>
+                </div>
+                <div class="stack">
+                    <div class="input-group">
+                        <label for="heroKicker">Hero kicker</label>
+                        <input class="text-input" id="heroKicker" name="heroKicker" value="<%= hero.kicker || '' %>">
+                    </div>
+                    <div class="input-group">
+                        <label for="heroTitle">Hero title</label>
+                        <input class="text-input" id="heroTitle" name="heroTitle" value="<%= hero.title || '' %>">
+                    </div>
+                    <div class="input-group">
+                        <label for="heroDescription">Hero description</label>
+                        <textarea class="text-area" id="heroDescription" name="heroDescription"><%= hero.description || '' %></textarea>
+                    </div>
+                    <div class="double-grid">
+                        <div class="input-group">
+                            <label for="heroPrimaryCtaLabel">Primary CTA label</label>
+                            <input class="text-input" id="heroPrimaryCtaLabel" name="heroPrimaryCtaLabel" value="<%= hero.primaryCtaLabel || '' %>">
+                        </div>
+                        <div class="input-group">
+                            <label for="heroPrimaryCtaHref">Primary CTA link</label>
+                            <input class="text-input" id="heroPrimaryCtaHref" name="heroPrimaryCtaHref" value="<%= hero.primaryCtaHref || '' %>" placeholder="/products">
+                        </div>
+                        <div class="input-group">
+                            <label for="heroSecondaryCtaLabel">Secondary CTA label</label>
+                            <input class="text-input" id="heroSecondaryCtaLabel" name="heroSecondaryCtaLabel" value="<%= hero.secondaryCtaLabel || '' %>">
+                        </div>
+                        <div class="input-group">
+                            <label for="heroSecondaryCtaHref">Secondary CTA link</label>
+                            <input class="text-input" id="heroSecondaryCtaHref" name="heroSecondaryCtaHref" value="<%= hero.secondaryCtaHref || '' %>" placeholder="/contact">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="editor-section">
+                <div class="section-head">
+                    <div>
+                        <div class="table-label">Media</div>
+                        <h4 class="section-title">Hero asset</h4>
+                    </div>
+                </div>
+                <div class="upload-box">
+                    <div class="field-grid">
+                        <div class="input-group">
+                            <label for="heroMediaUrl">Hero media URL</label>
+                            <input class="text-input" id="heroMediaUrl" name="heroMediaUrl" value="<%= hero.mediaUrl || '' %>" placeholder="/uploads/videos/hero.mp4">
+                        </div>
+                        <div class="input-group">
+                            <label for="heroMediaType">Hero media type</label>
+                            <input class="text-input" id="heroMediaType" name="heroMediaType" value="<%= hero.mediaType || 'video' %>" placeholder="video">
+                        </div>
+                    </div>
+                    <input type="hidden" name="heroMediaMimeType" value="<%= hero.mediaMimeType || '' %>">
+                    <div class="input-group">
+                        <label for="heroMediaFile">Upload replacement media</label>
+                        <input id="heroMediaFile" name="heroMediaFile" type="file" accept="image/*,video/*">
+                        <p class="field-help">Upload a new image or video to override the current hero asset on save.</p>
+                    </div>
+                    <div class="preview-frame" id="heroPreview" <%= hero.mediaUrl ? "" : 'style="display:none;"' %>>
+                        <% if ((hero.mediaType || "video") === "video") { %>
+                            <video src="<%= hero.mediaUrl || '' %>" controls muted></video>
+                        <% } else { %>
+                            <img src="<%= hero.mediaUrl || '' %>" alt="Hero preview">
+                        <% } %>
+                    </div>
+                </div>
+            </section>
+
+            <section class="editor-section">
+                <div class="section-head">
+                    <div>
+                        <div class="table-label">Trust metrics</div>
+                        <h4 class="section-title">Hero statistics</h4>
+                    </div>
+                </div>
+                <% [0, 1, 2].forEach(function(index) { const stat = heroStats[index] || {}; %>
+                    <div class="field-grid">
+                        <div class="input-group">
+                            <label for="heroStatValue<%= index + 1 %>">Value <%= index + 1 %></label>
+                            <input class="text-input" id="heroStatValue<%= index + 1 %>" name="heroStatValue<%= index + 1 %>" value="<%= stat.value || '' %>">
+                        </div>
+                        <div class="input-group">
+                            <label for="heroStatLabel<%= index + 1 %>">Label <%= index + 1 %></label>
+                            <input class="text-input" id="heroStatLabel<%= index + 1 %>" name="heroStatLabel<%= index + 1 %>" value="<%= stat.label || '' %>">
+                        </div>
+                    </div>
+                <% }) %>
+            </section>
+
+            <section class="editor-section">
+                <div class="section-head">
+                    <div>
+                        <div class="table-label">Trust pillars</div>
+                        <h4 class="section-title">Credibility blocks</h4>
+                    </div>
+                </div>
+                <% [0, 1, 2].forEach(function(index) { const pillar = trustPillars[index] || {}; %>
+                    <div class="stack">
+                        <div class="input-group">
+                            <label for="pillarTitle<%= index + 1 %>">Pillar title <%= index + 1 %></label>
+                            <input class="text-input" id="pillarTitle<%= index + 1 %>" name="pillarTitle<%= index + 1 %>" value="<%= pillar.title || '' %>">
+                        </div>
+                        <div class="input-group">
+                            <label for="pillarDescription<%= index + 1 %>">Pillar description <%= index + 1 %></label>
+                            <textarea class="text-area" id="pillarDescription<%= index + 1 %>" name="pillarDescription<%= index + 1 %>"><%= pillar.description || '' %></textarea>
+                        </div>
+                    </div>
+                <% }) %>
+            </section>
+
+            <section class="editor-section">
+                <div class="section-head">
+                    <div>
+                        <div class="table-label">Promotional banner</div>
+                        <h4 class="section-title">Offer strip</h4>
+                    </div>
+                </div>
+                <div class="stack">
+                    <div class="input-group">
+                        <label for="promoKicker">Banner kicker</label>
+                        <input class="text-input" id="promoKicker" name="promoKicker" value="<%= promoBanner.kicker || '' %>">
+                    </div>
+                    <div class="double-grid">
+                        <div class="input-group">
+                            <label for="promoOfferHighlight">Offer highlight</label>
+                            <input class="text-input" id="promoOfferHighlight" name="promoOfferHighlight" value="<%= promoBanner.offerHighlight || '' %>" placeholder="Upto 20%">
+                        </div>
+                        <div class="input-group">
+                            <label for="promoTitle">Banner title</label>
+                            <input class="text-input" id="promoTitle" name="promoTitle" value="<%= promoBanner.title || '' %>">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="promoDescription">Banner description</label>
+                        <textarea class="text-area" id="promoDescription" name="promoDescription"><%= promoBanner.description || '' %></textarea>
+                    </div>
+                    <div class="upload-box">
+                        <div class="field-grid">
+                            <div class="input-group">
+                                <label for="promoMediaUrl">Promo media URL</label>
+                                <input class="text-input" id="promoMediaUrl" name="promoMediaUrl" value="<%= promoBanner.mediaUrl || '' %>">
+                            </div>
+                            <div class="input-group">
+                                <label for="promoMediaType">Promo media type</label>
+                                <input class="text-input" id="promoMediaType" name="promoMediaType" value="<%= promoBanner.mediaType || 'image' %>">
+                            </div>
+                        </div>
+                        <input type="hidden" name="promoMediaMimeType" value="<%= promoBanner.mediaMimeType || '' %>">
+                        <div class="input-group">
+                            <label for="promoMediaFile">Upload replacement media</label>
+                            <input id="promoMediaFile" name="promoMediaFile" type="file" accept="image/*,video/*">
+                        </div>
+                        <div class="preview-frame" id="promoPreview" <%= promoBanner.mediaUrl ? "" : 'style="display:none;"' %>>
+                            <% if ((promoBanner.mediaType || "image") === "video") { %>
+                                <video src="<%= promoBanner.mediaUrl || '' %>" controls muted></video>
+                            <% } else { %>
+                                <img src="<%= promoBanner.mediaUrl || '' %>" alt="Promo preview">
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="field-grid">
+                        <div class="input-group">
+                            <label for="promoPrimaryCtaLabel">Primary CTA label</label>
+                            <input class="text-input" id="promoPrimaryCtaLabel" name="promoPrimaryCtaLabel" value="<%= promoBanner.primaryCtaLabel || '' %>">
+                        </div>
+                        <div class="input-group">
+                            <label for="promoPrimaryCtaHref">Primary CTA link</label>
+                            <input class="text-input" id="promoPrimaryCtaHref" name="promoPrimaryCtaHref" value="<%= promoBanner.primaryCtaHref || '' %>" placeholder="/products">
+                        </div>
+                        <div class="input-group">
+                            <label for="promoSecondaryCtaLabel">Secondary CTA label</label>
+                            <input class="text-input" id="promoSecondaryCtaLabel" name="promoSecondaryCtaLabel" value="<%= promoBanner.secondaryCtaLabel || '' %>">
+                        </div>
+                        <div class="input-group">
+                            <label for="promoSecondaryCtaHref">Secondary CTA link</label>
+                            <input class="text-input" id="promoSecondaryCtaHref" name="promoSecondaryCtaHref" value="<%= promoBanner.secondaryCtaHref || '' %>" placeholder="/contact">
+                        </div>
+                        <div class="input-group">
+                            <label for="promoMetaTitle">Meta title</label>
+                            <input class="text-input" id="promoMetaTitle" name="promoMetaTitle" value="<%= promoBanner.metaTitle || '' %>">
+                        </div>
+                        <div class="input-group">
+                            <label for="promoMetaSubtitle">Meta subtitle</label>
+                            <input class="text-input" id="promoMetaSubtitle" name="promoMetaSubtitle" value="<%= promoBanner.metaSubtitle || '' %>">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="editor-section">
+                <div class="section-head">
+                    <div>
+                        <div class="table-label">Search metadata</div>
+                        <h4 class="section-title">SEO</h4>
+                    </div>
+                </div>
+                <div class="stack">
+                    <div class="input-group">
+                        <label for="homeSeoTitle">SEO title</label>
+                        <input class="text-input" id="homeSeoTitle" name="homeSeoTitle" value="<%= contentData?.seo?.title || '' %>">
+                    </div>
+                    <div class="input-group">
+                        <label for="homeSeoDescription">SEO description</label>
+                        <textarea class="text-area" id="homeSeoDescription" name="homeSeoDescription"><%= contentData?.seo?.description || '' %></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <div class="editor-toolbar">
+                <p class="meta-note">Saving updates the backend `home_content` record used by the frontend homepage API.</p>
+                <div class="button-row">
+                    <a class="ghost-btn" href="<%= resolvedAdminBaseUrl %>/admin/dashboard">Cancel</a>
+                    <button type="submit" class="btn">Save home content</button>
+                </div>
+            </div>
+        </form>
+    <% } else { %>
+        <form method="POST" action="<%= resolvedAdminBaseUrl %>/admin/content/about" class="editor-body" enctype="multipart/form-data">
+            <section class="editor-section">
+                <div class="section-head">
+                    <div>
+                        <div class="table-label">Trust stats</div>
+                        <h4 class="section-title">Proof points</h4>
+                    </div>
+                </div>
+                <% [0, 1, 2, 3].forEach(function(index) { const stat = trustStats[index] || {}; %>
+                    <div class="field-grid">
+                        <div class="input-group">
+                            <label for="aboutStatValue<%= index + 1 %>">Value <%= index + 1 %></label>
+                            <input class="text-input" id="aboutStatValue<%= index + 1 %>" name="aboutStatValue<%= index + 1 %>" value="<%= stat.value || '' %>">
+                        </div>
+                        <div class="input-group">
+                            <label for="aboutStatLabel<%= index + 1 %>">Label <%= index + 1 %></label>
+                            <input class="text-input" id="aboutStatLabel<%= index + 1 %>" name="aboutStatLabel<%= index + 1 %>" value="<%= stat.label || '' %>">
+                        </div>
+                    </div>
+                <% }) %>
+            </section>
+
+            <section class="editor-section">
+                <div class="section-head">
+                    <div>
+                        <div class="table-label">Highlights</div>
+                        <h4 class="section-title">Key story bullets</h4>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="aboutHighlights">One highlight per line</label>
+                    <textarea class="text-area" id="aboutHighlights" name="aboutHighlights"><%= Array.isArray(contentData?.sections?.highlights) ? contentData.sections.highlights.join('\n') : '' %></textarea>
+                    <p class="field-help">These lines are converted into an array before the backend stores them.</p>
+                </div>
+            </section>
+
+            <section class="editor-section">
+                <div class="section-head">
+                    <div>
+                        <div class="table-label">Story image</div>
+                        <h4 class="section-title">Visual trust signal</h4>
+                    </div>
+                </div>
+                <div class="upload-box">
+                    <div class="field-grid">
+                        <div class="input-group">
+                            <label for="aboutStoryImageUrl">Image URL</label>
+                            <input class="text-input" id="aboutStoryImageUrl" name="aboutStoryImageUrl" value="<%= storyImage.mediaUrl || '' %>" placeholder="/uploads/images/about-image.png">
+                        </div>
+                        <div class="input-group">
+                            <label for="aboutStoryImageType">Image type</label>
+                            <input class="text-input" id="aboutStoryImageType" name="aboutStoryImageType" value="<%= storyImage.mediaType || 'image' %>" placeholder="image">
+                        </div>
+                    </div>
+                    <input type="hidden" name="aboutStoryImageMimeType" value="<%= storyImage.mediaMimeType || '' %>">
+                    <div class="input-group">
+                        <label for="aboutStoryImageAlt">Image alt text</label>
+                        <input class="text-input" id="aboutStoryImageAlt" name="aboutStoryImageAlt" value="<%= storyImage.alt || 'Rudraksh Pharmacy trusted medicine care' %>">
+                    </div>
+                    <div class="input-group">
+                        <label for="aboutStoryImageFile">Upload replacement image</label>
+                        <input id="aboutStoryImageFile" name="aboutStoryImageFile" type="file" accept="image/*">
+                    </div>
+                    <div class="preview-frame" id="aboutPreview" <%= storyImage.mediaUrl ? "" : 'style="display:none;"' %>>
+                        <img src="<%= storyImage.mediaUrl || '' %>" alt="<%= storyImage.alt || 'About preview' %>">
+                    </div>
+                </div>
+            </section>
+
+            <section class="editor-section">
+                <div class="section-head">
+                    <div>
+                        <div class="table-label">Search metadata</div>
+                        <h4 class="section-title">SEO</h4>
+                    </div>
+                </div>
+                <div class="stack">
+                    <div class="input-group">
+                        <label for="aboutSeoTitle">SEO title</label>
+                        <input class="text-input" id="aboutSeoTitle" name="aboutSeoTitle" value="<%= contentData?.seo?.title || '' %>">
+                    </div>
+                    <div class="input-group">
+                        <label for="aboutSeoDescription">SEO description</label>
+                        <textarea class="text-area" id="aboutSeoDescription" name="aboutSeoDescription"><%= contentData?.seo?.description || '' %></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <div class="editor-toolbar">
+                <p class="meta-note">Saving updates the backend `about_content` record used by the frontend about page API.</p>
+                <div class="button-row">
+                    <a class="ghost-btn" href="<%= resolvedAdminBaseUrl %>/admin/dashboard">Cancel</a>
+                    <button type="submit" class="btn">Save about content</button>
+                </div>
+            </div>
+        </form>
+    <% } %>
+</section>
+
+<script nonce="<%= cspNonce %>">
+    function renderPreview(previewId, urlId, typeId, fallbackType) {
+        const preview = document.getElementById(previewId);
+        const urlInput = document.getElementById(urlId);
+        if (!preview || !urlInput) return;
+
+        const source = urlInput.value.trim();
+        const typeInput = typeId ? document.getElementById(typeId) : null;
+        const mediaType = (typeInput?.value || fallbackType || "image").trim().toLowerCase();
+
+        if (!source) {
+            preview.style.display = "none";
+            preview.innerHTML = "";
+            return;
+        }
+
+        preview.style.display = "";
+        preview.innerHTML = mediaType === "video"
+            ? `<video src="${source}" controls muted></video>`
+            : `<img src="${source}" alt="Preview">`;
+    }
+
+    [
+        ["heroPreview", "heroMediaUrl", "heroMediaType", "video"],
+        ["promoPreview", "promoMediaUrl", "promoMediaType", "image"],
+        ["aboutPreview", "aboutStoryImageUrl", "aboutStoryImageType", "image"]
+    ].forEach(([previewId, urlId, typeId, fallbackType]) => {
+        const urlInput = document.getElementById(urlId);
+        const typeInput = document.getElementById(typeId);
+        if (urlInput) {
+            urlInput.addEventListener("input", () => renderPreview(previewId, urlId, typeId, fallbackType));
+        }
+        if (typeInput) {
+            typeInput.addEventListener("input", () => renderPreview(previewId, urlId, typeId, fallbackType));
+        }
+        renderPreview(previewId, urlId, typeId, fallbackType);
+    });
+</script>
+
+<%- include("partials/admin-shell-end", { cspNonce }) %>

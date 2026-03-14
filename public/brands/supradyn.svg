@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="Supradyn">
+  <circle cx="90" cy="90" r="84" fill="#ffffff"/>
+  <circle cx="90" cy="90" r="46" fill="#ffcc00"/>
+  <circle cx="90" cy="90" r="48" fill="none" stroke="#f59e0b" stroke-width="3"/>
+  <text x="90" y="98" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#1f2937">Supradyn</text>
+</svg>

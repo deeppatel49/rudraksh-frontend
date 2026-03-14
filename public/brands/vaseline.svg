@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="Vaseline">
+  <circle cx="90" cy="90" r="84" fill="#ffffff"/>
+  <ellipse cx="90" cy="90" rx="60" ry="40" fill="#0b3f8a"/>
+  <ellipse cx="90" cy="90" rx="62" ry="42" fill="none" stroke="#1d4ed8" stroke-width="3"/>
+  <text x="90" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#ffffff">Vaseline</text>
+</svg>

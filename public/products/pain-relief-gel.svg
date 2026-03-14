@@ -1,0 +1,7 @@
+<svg width="640" height="360" viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="360" rx="28" fill="#EAF5FF"/>
+  <path d="M156 192C156 170 174 152 196 152H502L470 252H196C174 252 156 234 156 212V192Z" fill="#FFFFFF" stroke="#9FC5E9" stroke-width="8"/>
+  <rect x="190" y="177" width="190" height="50" rx="10" fill="#1F5FA5"/>
+  <path d="M170 152H206V252H170C157 252 146 241 146 228V176C146 163 157 152 170 152Z" fill="#C4E0F7"/>
+  <text x="284" y="208" text-anchor="middle" font-size="18" font-family="Arial, sans-serif" fill="#FFFFFF">PAIN GEL</text>
+</svg>

@@ -1,0 +1,370 @@
+<%
+const resolvedAdminBaseUrl = typeof adminBaseUrl !== "undefined" && adminBaseUrl ? adminBaseUrl : "";
+const pageTitle = "Chat Box";
+const activeView = "chat-box";
+const safeErrorMessage = typeof errorMessage !== "undefined" ? errorMessage : "";
+const safeSuccessMessage = typeof successMessage !== "undefined" ? successMessage : "";
+const threads = Array.isArray(chatThreads) ? chatThreads : [];
+const stats = chatStats || { totalThreads: 0, totalMessages: 0, unreadCount: 0 };
+%>
+<%- include("partials/admin-shell-start", { pageTitle, activeView, resolvedAdminBaseUrl, adminUser, cspNonce }) %>
+
+<section class="page-head">
+    <div class="page-copy">
+        <span class="page-badge">Chat Management</span>
+        <h2 class="page-title">Customer conversations</h2>
+        <p>Manage all customer chat threads from the dashboard. Select a conversation to send messages and updates.</p>
+    </div>
+    <div class="page-actions">
+        <span class="info-pill">Refresh to update</span>
+    </div>
+</section>
+
+<% if (safeErrorMessage) { %>
+    <div class="message error">
+        <div>
+            <strong>Action failed</strong>
+            <p><%= safeErrorMessage %></p>
+        </div>
+    </div>
+<% } %>
+
+<% if (safeSuccessMessage) { %>
+    <div class="message success">
+        <div>
+            <strong>Success</strong>
+            <p><%= safeSuccessMessage %></p>
+        </div>
+    </div>
+<% } %>
+
+<section class="stats-grid">
+    <article class="stat-card">
+        <div class="stat-card-head">
+            <div>
+                <div class="table-label">Total Conversations</div>
+                <strong><%= stats.totalThreads %></strong>
+            </div>
+            <span class="status-pill <%= stats.totalThreads > 0 ? 'good' : 'muted' %>"><%= stats.totalThreads > 0 ? 'Active' : 'Empty' %></span>
+        </div>
+        <p class="supporting-copy">Customer chat threads in the system.</p>
+    </article>
+
+    <article class="stat-card">
+        <div class="stat-card-head">
+            <div>
+                <div class="table-label">Total Messages</div>
+                <strong><%= stats.totalMessages %></strong>
+            </div>
+            <span class="status-pill <%= stats.totalMessages > 0 ? 'good' : 'muted' %>"><%= stats.totalMessages > 0 ? 'Messages' : 'No messages' %></span>
+        </div>
+        <p class="supporting-copy">Total messages across all conversations.</p>
+    </article>
+
+    <article class="stat-card">
+        <div class="stat-card-head">
+            <div>
+                <div class="table-label">Unread Messages</div>
+                <strong><%= stats.unreadCount %></strong>
+            </div>
+            <span class="status-pill <%= stats.unreadCount > 0 ? 'warning' : 'good' %>"><%= stats.unreadCount > 0 ? 'Needs attention' : 'All read' %></span>
+        </div>
+        <p class="supporting-copy">Messages waiting for your response.</p>
+    </article>
+</section>
+
+<section class="panel-card">
+    <div class="panel-head">
+        <div>
+            <div class="table-label">All Chat Threads</div>
+            <h3 class="section-title">Manage conversations</h3>
+            <p class="table-caption">Click on any customer to open their dedicated chat window and send messages.</p>
+        </div>
+    </div>
+
+    <% if (threads.length > 0) { %>
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>City</th>
+                        <th>Login Method</th>
+                        <th>Last Activity</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% threads.forEach(function(thread) { %>
+                        <tr>
+                            <td>
+                                <strong><%= thread.name || "Customer" %></strong>
+                            </td>
+                            <td>
+                                <code><%= thread.email || "N/A" %></code>
+                            </td>
+                            <td>
+                                <code><%= thread.phone || "N/A" %></code>
+                            </td>
+                            <td>
+                                <%= thread.city || "N/A" %>
+                            </td>
+                            <td>
+                                <span class="mini-chip <%= thread.loginMethod === 'google' ? 'google' : 'manual' %>">
+                                    <%= thread.loginMethod === 'google' ? '🔵 Google' : '⚙️ Manual' %>
+                                </span>
+                            </td>
+                            <td>
+                                <small><%= thread.lastLoginAt ? new Date(thread.lastLoginAt).toLocaleString("en-IN") : "Unknown" %></small>
+                            </td>
+                            <td>
+                                <a class="btn-link" href="<%= resolvedAdminBaseUrl %>/admin/customer-chat?email=<%= encodeURIComponent(thread.email || '') %>&phone=<%= encodeURIComponent(thread.phone || '') %>&userId=<%= encodeURIComponent(thread.userId || '') %>&name=<%= encodeURIComponent(thread.name || '') %>">
+                                    Open Chat
+                                </a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } else { %>
+        <div class="empty-state">
+            <div>
+                <strong>No chat threads yet.</strong>
+                <p>Customer conversations will appear here once users log in and start interacting with support.</p>
+            </div>
+        </div>
+    <% } %>
+</section>
+
+<%- include("partials/admin-shell-end") %>
+
+<style>
+    /* ===== CHIP & BADGE STYLES ===== */
+    .mini-chip {
+        display: inline-block;
+        padding: 0.35rem 0.85rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        background: #f0f0f0;
+        color: #555;
+        border: 1px solid #e0e0e0;
+        white-space: nowrap;
+    }
+
+    .mini-chip.google {
+        background: linear-gradient(135deg, #fbbc05 0%, #f9a825 100%);
+        color: #000;
+        border: 1px solid #f9a825;
+        box-shadow: 0 2px 4px rgba(251, 188, 5, 0.2);
+    }
+
+    .mini-chip.manual {
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+        color: #fff;
+        border: 1px solid #1976D2;
+        box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
+    }
+
+    /* ===== TABLE STYLES ===== */
+    .table-wrapper {
+        overflow-x: auto;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+    }
+
+    .data-table thead {
+        background: linear-gradient(135deg, #f5f7fa 0%, #eef2f7 100%);
+        border-bottom: 2px solid #d0d8e0;
+    }
+
+    .data-table th {
+        padding: 1.1rem 1rem;
+        text-align: left;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: #34495e;
+        background: #f5f7fa;
+    }
+
+    .data-table th:first-child {
+        border-radius: 8px 0 0 0;
+    }
+
+    .data-table th:last-child {
+        border-radius: 0 8px 0 0;
+        text-align: center;
+    }
+
+    .data-table tbody tr {
+        border-bottom: 1px solid #ecf0f5;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .data-table tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .data-table tbody tr:hover {
+        background: linear-gradient(90deg, #f0f7ff 0%, #f8fbff 100%);
+        box-shadow: inset 2px 0 0 #2196F3;
+    }
+
+    .data-table td {
+        padding: 1rem;
+        vertical-align: middle;
+        font-size: 0.95rem;
+        color: #2c3e50;
+    }
+
+    .data-table td strong {
+        font-weight: 700;
+        color: #1a252f;
+    }
+
+    .data-table code {
+        background: #f0f3f7;
+        padding: 0.35rem 0.6rem;
+        border-radius: 4px;
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.85rem;
+        color: #c41c3b;
+        font-weight: 500;
+        letter-spacing: -0.3px;
+    }
+
+    .data-table td:last-child {
+        text-align: center;
+        padding: 1rem 0.5rem;
+    }
+
+    /* ===== BUTTON STYLES ===== */
+    .btn-link {
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.4px;
+        padding: 0.65rem 1.25rem;
+        border: none;
+        border-radius: 6px;
+        display: inline-block;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+        text-transform: uppercase;
+        outline: none;
+    }
+
+    .btn-link:hover {
+        background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+        box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+        transform: translateY(-2px);
+    }
+
+    .btn-link:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(33, 150, 243, 0.3);
+    }
+
+    /* ===== STATUS PILL STYLES ===== */
+    .status-pill {
+        display: inline-block;
+        padding: 0.4rem 0.95rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        border: none;
+    }
+
+    .status-pill.good {
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        color: #1b5e20;
+        border: 1px solid #a5d6a7;
+    }
+
+    .status-pill.warning {
+        background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+        color: #e65100;
+        border: 1px solid #ffcc80;
+    }
+
+    .status-pill.muted {
+        background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%);
+        color: #757575;
+        border: 1px solid #e0e0e0;
+    }
+
+    /* ===== INFO PILL ===== */
+    .info-pill {
+        display: inline-block;
+        padding: 0.4rem 0.95rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        color: #0d47a1;
+        border: 1px solid #90caf9;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+        padding: 4rem 2rem;
+        text-align: center;
+        background: linear-gradient(135deg, #f5f7fa 0%, #eef2f7 100%);
+        border-radius: 12px;
+        border: 2px dashed #d0d8e0;
+    }
+
+    .empty-state strong {
+        display: block;
+        font-size: 1.15rem;
+        margin-bottom: 0.75rem;
+        color: #2c3e50;
+        font-weight: 700;
+    }
+
+    .empty-state p {
+        color: #7f8c8d;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-link {
+            padding: 0.5rem 0.9rem;
+            font-size: 0.75rem;
+        }
+
+        .mini-chip {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+        }
+    }
+</style>
