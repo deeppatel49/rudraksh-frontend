@@ -17,7 +17,7 @@ export default function AdminDashboardPage() {
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push("/admin/login");
+      router.push("/login");
     }
   }, [authLoading, isAuthenticated, router]);
 
@@ -44,7 +44,7 @@ export default function AdminDashboardPage() {
 
   const handleLogout = async () => {
     await logout();
-    router.push("/admin/login");
+    router.push("/login");
   };
 
   if (authLoading || !isAuthenticated) {
