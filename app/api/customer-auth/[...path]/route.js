@@ -2,22 +2,32 @@ import { createBackendApiUrl } from "../../../lib/backend-api";
 
 export const dynamic = "force-dynamic";
 
-function buildBackendUrl(request, pathSegments = []) {
-  const safeSegments = Array.isArray(pathSegments)
-    ? pathSegments.filter(Boolean)
-    : String(pathSegments || "")
-        .split("/")
-        .map((segment) => segment.trim())
-        .filter(Boolean);
-  const pathname = `/customer-auth/${safeSegments.join("/")}`;
-  const { search } = new URL(request.url);
-  return `${createBackendApiUrl(pathname)}${search || ""}`;
+function buildBackendUrl(request) {
+  const url = new URL(request.url);
+  const routePrefix = "/api/customer-auth";
+  let forwardedPath = url.pathname.startsWith(routePrefix)
+    ? url.pathname.slice(routePrefix.length)
+    : "";
+
+  forwardedPath = String(forwardedPath || "").replace(/^\/+/, "").trim();
+  const pathname = forwardedPath ? `/customer-auth/${forwardedPath}` : "/customer-auth";
+  return `${createBackendApiUrl(pathname)}${url.search || ""}`;
 }
 
-async function proxyToBackend(request, context, method) {
+async function proxyToBackend(request, method) {
   try {
-    const pathSegments = context?.params?.path || [];
-    const targetUrl = buildBackendUrl(request, pathSegments);
+    const url = new URL(request.url);
+    if (url.pathname === "/api/customer-auth" || url.pathname === "/api/customer-auth/") {
+      return new Response(JSON.stringify({ error: "Customer auth endpoint is missing a path." }), {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-store, max-age=0",
+        },
+      });
+    }
+
+    const targetUrl = buildBackendUrl(request);
     const headers = {
       Accept: "application/json",
     };
@@ -63,13 +73,13 @@ async function proxyToBackend(request, context, method) {
 }
 
 export async function GET(request, context) {
-  return proxyToBackend(request, context, "GET");
+  return proxyToBackend(request, "GET");
 }
 
 export async function POST(request, context) {
-  return proxyToBackend(request, context, "POST");
+  return proxyToBackend(request, "POST");
 }
 
 export async function PUT(request, context) {
-  return proxyToBackend(request, context, "PUT");
+  return proxyToBackend(request, "PUT");
 }
