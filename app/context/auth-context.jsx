@@ -49,7 +49,12 @@ function toProfileRecord(sessionUser) {
 }
 
 async function callBackendJson(pathname, options = {}) {
-  const response = await fetch(createBackendApiUrl(pathname), {
+  const normalizedPath = String(pathname || "").startsWith("/") ? String(pathname) : `/${pathname}`;
+  const requestUrl = normalizedPath.startsWith("/customer-auth")
+    ? `/api${normalizedPath}`
+    : createBackendApiUrl(normalizedPath);
+
+  const response = await fetch(requestUrl, {
     cache: "no-store",
     ...options,
     headers: {
