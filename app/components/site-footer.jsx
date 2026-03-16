@@ -89,7 +89,7 @@ export function SiteFooter() {
                 </svg>
               </a>
               <a
-                href="https://www.instagram.com/rudrakshpharmacy/"
+                href="https://www.instagram.com/rudraksh_pharmacy_adajan?igsh=bjdpdGg5dWZnbnRz"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
