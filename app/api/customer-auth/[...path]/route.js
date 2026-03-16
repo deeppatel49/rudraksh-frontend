@@ -3,7 +3,12 @@ import { createBackendApiUrl } from "../../../lib/backend-api";
 export const dynamic = "force-dynamic";
 
 function buildBackendUrl(request, pathSegments = []) {
-  const safeSegments = Array.isArray(pathSegments) ? pathSegments.filter(Boolean) : [];
+  const safeSegments = Array.isArray(pathSegments)
+    ? pathSegments.filter(Boolean)
+    : String(pathSegments || "")
+        .split("/")
+        .map((segment) => segment.trim())
+        .filter(Boolean);
   const pathname = `/customer-auth/${safeSegments.join("/")}`;
   const { search } = new URL(request.url);
   return `${createBackendApiUrl(pathname)}${search || ""}`;

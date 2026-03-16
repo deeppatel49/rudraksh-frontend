@@ -7,7 +7,15 @@ function normalizeApiBaseUrl(rawUrl) {
     return "";
   }
 
-  return trimmed.endsWith(API_PREFIX) ? trimmed : `${trimmed}${API_PREFIX}`;
+  if (trimmed.endsWith(API_PREFIX)) {
+    return trimmed;
+  }
+
+  if (trimmed.endsWith("/api")) {
+    return `${trimmed}/v1`;
+  }
+
+  return `${trimmed}${API_PREFIX}`;
 }
 
 export function getBackendApiBaseUrl() {
