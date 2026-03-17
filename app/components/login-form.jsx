@@ -64,6 +64,13 @@ export function LoginForm() {
   const [createPassword, setCreatePassword] = useState("");
   const [createConfirmPassword, setCreateConfirmPassword] = useState("");
   const nextPath = useMemo(() => searchParams.get("next") || "/products", [searchParams]);
+  const safeNextPath = useMemo(() => {
+    const value = String(nextPath || "").trim();
+    if (!value.startsWith("/") || value.startsWith("//")) {
+      return "/products";
+    }
+    return value;
+  }, [nextPath]);
   const actionType = useMemo(() => searchParams.get("action") || "", [searchParams]);
   const forceNext = useMemo(() => searchParams.get("forceNext") === "1", [searchParams]);
   const actionProductId = useMemo(() => searchParams.get("productId") || "", [searchParams]);
@@ -78,12 +85,12 @@ export function LoginForm() {
     return Number.isFinite(raw) ? Math.max(1, Math.floor(raw)) : 1;
   }, [searchParams]);
   const profilePath = useMemo(() => {
-    const safeNext = nextPath && nextPath !== "/profile" ? nextPath : "/products";
+    const safeNext = safeNextPath !== "/profile" ? safeNextPath : "/products";
     return `/profile?next=${encodeURIComponent(safeNext)}`;
-  }, [nextPath]);
+  }, [safeNextPath]);
   const postLoginPath = useMemo(() => {
     if (forceNext) {
-      return nextPath || "/products";
+      return safeNextPath;
     }
 
     if (actionType === "buy_now") {
@@ -91,11 +98,15 @@ export function LoginForm() {
     }
 
     if (actionType === "add_to_cart") {
-      return nextPath || "/products";
+      return safeNextPath;
+    }
+
+    if (safeNextPath) {
+      return safeNextPath;
     }
 
     return profilePath;
-  }, [actionType, forceNext, nextPath, profilePath]);
+  }, [actionType, forceNext, safeNextPath, profilePath]);
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
   const runPostLoginAction = (sessionUser) => {
