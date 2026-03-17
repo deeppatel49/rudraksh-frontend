@@ -56,8 +56,10 @@ export const metadata = {
     images: ["/rudraksha-logo-v2.png"],
   },
   icons: {
-    icon: "/favicon.png",
-    apple: "/favicon.png",
+    icon: [
+      { url: "/rudraksha-logo-v2.png", type: "image/png" },
+    ],
+    apple: "/rudraksha-logo-v2.png",
   },
 };
 
