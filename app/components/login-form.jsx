@@ -109,6 +109,20 @@ export function LoginForm() {
   }, [actionType, forceNext, safeNextPath, profilePath]);
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
+  const redirectAfterLogin = (targetPath) => {
+    const safeTarget = String(targetPath || "").trim() || "/products";
+    router.replace(safeTarget);
+
+    // Fallback to hard navigation if client routing does not leave /login quickly.
+    if (typeof window !== "undefined") {
+      window.setTimeout(() => {
+        if (window.location.pathname === "/login") {
+          window.location.assign(safeTarget);
+        }
+      }, 150);
+    }
+  };
+
   const runPostLoginAction = (sessionUser) => {
     if ((actionType === "add_to_cart" || actionType === "buy_now") && actionProductId) {
       addItem(
@@ -123,7 +137,7 @@ export function LoginForm() {
       );
     }
 
-    router.replace(postLoginPath);
+    redirectAfterLogin(postLoginPath);
   };
 
   const finishLogin = async (payload, loginMethod = "manual") => {
@@ -140,7 +154,7 @@ export function LoginForm() {
       return;
     }
 
-    router.replace(postLoginPath);
+    redirectAfterLogin(postLoginPath);
   }, [isHydrated, postLoginPath, router, user]);
 
   const handleIdentifierSubmit = (event) => {

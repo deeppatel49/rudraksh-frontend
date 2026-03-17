@@ -95,7 +95,7 @@ export function SiteHeader() {
     router.refresh();
   };
 
-  const medicinesHref = user ? "/products" : "/login?next=%2Fproducts&forceNext=1";
+  const medicinesHref = "/products";
 
   const renderNavLinks = () =>
     navLinks.map((link) => (
