@@ -7,6 +7,7 @@ const AuthContext = createContext(null);
 const LEGACY_STORAGE_KEY = "rudraksha_auth_user";
 const CURRENT_USER_KEY = "rudraksha_auth_current_user_id";
 const AUTH_COOKIE_KEY = "rudraksh_auth_user_id";
+const AUTH_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
 const REQUIRED_PROFILE_FIELDS = [
   "fullName",
   "mobileNumber",
@@ -79,8 +80,8 @@ function setAuthSessionUserId(userId) {
 
   if (typeof window !== "undefined") {
     window.sessionStorage.setItem(CURRENT_USER_KEY, safeUserId);
-    window.localStorage.removeItem(CURRENT_USER_KEY);
-    document.cookie = `${AUTH_COOKIE_KEY}=${encodeURIComponent(safeUserId)}; Path=/; SameSite=Lax`;
+    window.localStorage.setItem(CURRENT_USER_KEY, safeUserId);
+    document.cookie = `${AUTH_COOKIE_KEY}=${encodeURIComponent(safeUserId)}; Path=/; Max-Age=${AUTH_COOKIE_MAX_AGE_SECONDS}; SameSite=Lax`;
   }
 }
 
@@ -90,6 +91,26 @@ function clearAuthSessionUserId() {
     window.localStorage.removeItem(CURRENT_USER_KEY);
     document.cookie = `${AUTH_COOKIE_KEY}=; Path=/; Max-Age=0; SameSite=Lax`;
   }
+}
+
+function readAuthCookieUserId() {
+  if (typeof document === "undefined") {
+    return "";
+  }
+
+  const cookiePairs = String(document.cookie || "")
+    .split(";")
+    .map((value) => value.trim())
+    .filter(Boolean);
+
+  const token = `${AUTH_COOKIE_KEY}=`;
+  const matched = cookiePairs.find((value) => value.startsWith(token));
+  if (!matched) {
+    return "";
+  }
+
+  const rawValue = matched.slice(token.length);
+  return String(decodeURIComponent(rawValue || "")).trim();
 }
 
 function readAuthSessionUserId() {
@@ -105,8 +126,16 @@ function readAuthSessionUserId() {
   // One-time migration for users who still have old localStorage sessions.
   const fromLocal = String(window.localStorage.getItem(CURRENT_USER_KEY) || "").trim();
   if (fromLocal) {
-    setAuthSessionUserId(fromLocal);
+    window.sessionStorage.setItem(CURRENT_USER_KEY, fromLocal);
+    document.cookie = `${AUTH_COOKIE_KEY}=${encodeURIComponent(fromLocal)}; Path=/; Max-Age=${AUTH_COOKIE_MAX_AGE_SECONDS}; SameSite=Lax`;
     return fromLocal;
+  }
+
+  const fromCookie = readAuthCookieUserId();
+  if (fromCookie) {
+    window.sessionStorage.setItem(CURRENT_USER_KEY, fromCookie);
+    window.localStorage.setItem(CURRENT_USER_KEY, fromCookie);
+    return fromCookie;
   }
 
   return "";
