@@ -31,7 +31,7 @@ const storesSeed = [
     pincode: 394101,
     area: 'VIP Circle, Mota Varacha',
     address: 'G-17M, Shreenathji Icon, Opp. Utran Power Station, VIP Circle, Mota Varacha, Surat - 394101',
-    phone: '9979979688',
+    phone: '9925361148',
     lat: 21.2320897,
     lng: 72.8668198,
     hours: '24 Hours',
