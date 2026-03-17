@@ -56,9 +56,13 @@ export const metadata = {
     images: ["/rudraksha-logo-v2.png"],
   },
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: [
+      { url: "/favicon.ico?v=20260317", sizes: "any" },
+      { url: "/favicon.png?v=20260317", type: "image/png", sizes: "32x32" },
+      { url: "/icon.png?v=20260317", type: "image/png", sizes: "192x192" },
+    ],
+    shortcut: "/favicon.ico?v=20260317",
+    apple: "/apple-icon.png?v=20260317",
   },
 };
 
